@@ -1,13 +1,18 @@
-import MyNavbar from "./Components/myNavbar";
-import Jumbotron from "./Components/jumbotron";
-import ListProduk from "./Components/listProduk";
+import LandingPage from "./pages/LandingPage";
+import DetailProduk from "./pages/DetailProduk";
+
+import { BrowserRouter as Router, Routes, Link, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <MyNavbar />
-      <Jumbotron />
-    </div>
+    <>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/detail-produk" element={<DetailProduk />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
