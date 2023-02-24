@@ -3,11 +3,8 @@ import Icon from "../assets/icon-2.png";
 import IconTri from "../assets/icon-3.png";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
+import data from "../assets/data.json";
 //
-import produkOne from "../assets/produk-1.png";
-import produkTwo from "../assets/produk-2.png";
-import produkTri from "../assets/produk-3.png";
-import produkFor from "../assets/produk-4.png";
 import waves from "../assets/Waves.png";
 
 const jContainer = {
@@ -67,62 +64,22 @@ function Jumbotron() {
         </Col>
       </Row>
       <Row className="d-flex justify-content-between" style={produk}>
-        <Col md={2}>
-          <Link to="/detail-produk" style={{ textDecoration: "none", color: "black" }}>
-            <Card style={{ width: "18rem" }}>
-              <Card.Img variant="top" src={produkOne} />
-              <Card.Body style={cardColor}>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  <p>Rp.299.900</p>
-                  <p>Stock : 99</p>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Link>
-        </Col>
-        <Col md={2}>
-          <Link to="/detail-produk" style={{ textDecoration: "none", color: "black" }}>
-            <Card style={{ width: "18rem" }}>
-              <Card.Img variant="top" src={produkTwo} />
-              <Card.Body style={cardColor}>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  <p>Rp.299.900</p>
-                  <p>Stock : 99</p>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Link>
-        </Col>
-        <Col md={2}>
-          <Link to="/detail-produk" style={{ textDecoration: "none", color: "black" }}>
-            <Card style={{ width: "18rem" }}>
-              <Card.Img variant="top" src={produkTri} />
-              <Card.Body style={cardColor}>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  <p>Rp.299.900</p>
-                  <p>Stock : 99</p>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Link>
-        </Col>
-        <Col md={2}>
-          <Link to="/" style={{ textDecoration: "none", color: "black" }}>
-            <Card style={{ width: "18rem" }}>
-              <Card.Img variant="top" src={produkFor} />
-              <Card.Body style={cardColor}>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  <p>Rp.299.900</p>
-                  <p>Stock : 99</p>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Link>
-        </Col>
+        {data.map((item, index) => (
+          <Col md={2}>
+            <Link to={`/detail-product/${index}`} style={{ textDecoration: "none", color: "black" }}>
+              <Card style={{ width: "18rem" }}>
+                <Card.Img variant="top" src={`/img/${item.photo}`} />
+                <Card.Body style={cardColor}>
+                  <Card.Title>{item.name}</Card.Title>
+                  <Card.Text>
+                    <p>{item.price}</p>
+                    <p>{item.stock}</p>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Link>
+          </Col>
+        ))}
       </Row>
     </Container>
   );
