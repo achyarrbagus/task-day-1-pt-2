@@ -4,7 +4,6 @@ import TableTransaction from "../Components/TableTransaction";
 const AdminDhsbord = () => {
   return (
     <Container>
-      <AdminNav />
       <TableTransaction />
     </Container>
   );

@@ -12,7 +12,7 @@ import Logo from "../assets/icon-2.png";
 import Sampah from "../assets/Sampah.png";
 import Biji from "../assets/BijiCoffee.png";
 
-function AdminNav() {
+function AdminNav(props) {
   return (
     <Navbar
       expand="lg"
@@ -53,11 +53,13 @@ function AdminNav() {
                     </Link>
                   </Dropdown.Item>
                   <Dropdown.Item>
-                    <Link to={""} style={{ textDecoration: "none", color: "#000000" }}>
-                      <div className="d-flex gap-2 ">
-                        <img width={"30px"} src={Sampah} className="p-1" />
-                        <p>Logout</p>
-                      </div>
+                    <Link to={"/"}>
+                      <button onClick={props.admin} style={{ backgroundColor: "white", border: "none" }}>
+                        <div className="d-flex gap-2 ">
+                          <img width={"30px"} src={Sampah} className="p-1" />
+                          <p>Logout</p>
+                        </div>
+                      </button>
                     </Link>
                   </Dropdown.Item>
                 </Dropdown.Menu>

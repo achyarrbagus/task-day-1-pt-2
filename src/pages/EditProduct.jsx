@@ -1,48 +1,34 @@
 import { Form } from "react-bootstrap";
 import { Container, Row, Col } from "react-bootstrap";
-import { Navigate, useNavigate } from "react-router-dom";
 import produkFor from "../assets/produk-4.png";
+import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const AddProduct = () => {
-  const navigate = useNavigate();
+const EditProduct = () => {
   //
+  const index = parseInt(useParams().id);
+  const data = JSON.parse(localStorage.getItem("EDITPRODUCT"));
+  const navigate = useNavigate();
 
-  const handlerNewProduct = (e) => {
+  const [editData, setEditData] = useState(data);
+
+  const handleRegisterChange = (e) => {
     e.preventDefault();
-    const nameProduct = document.getElementById("nameProduct").value;
-    const stock = document.getElementById("stock").value;
-    const priceProduct = document.getElementById("priceProduct").value;
-    const descriptionProduct = document.getElementById("descriptionProduct").value;
-    console.log(nameProduct, stock, priceProduct, descriptionProduct);
-    const date = new Date();
-    const id = date.getTime();
+    let name = e.target.name;
+    let value = e.target.value;
+    setEditData({ ...editData, [name]: value });
+  };
+  const handleSubmitEdit = (e) => {
+    e.preventDefault();
+    console.log(index);
+    const dataProduct = JSON.parse(localStorage.getItem("NEWPRODUCT"));
 
-    const newProduct = {
-      nameProduct: nameProduct,
-      stock: parseInt(stock),
-      priceProduct: parseInt(priceProduct),
-      descriptionProduct: descriptionProduct,
-      id: id,
-    };
-
-    const datas = [nameProduct];
-
-    if (typeof Storage !== "undefined") {
-      console.log("web browser tersedia");
-      if (localStorage.getItem("NEWPRODUCT")) {
-        let items = JSON.parse(localStorage.getItem("NEWPRODUCT"));
-        items.push(newProduct);
-        const convertUpdate = JSON.stringify(items);
-        localStorage.setItem("NEWPRODUCT", convertUpdate);
-      } else {
-        const convert = JSON.stringify(datas);
-        localStorage.setItem("NEWPRODUCT", convert);
-      }
-    } else {
-      // Local storage tidak tersedia
-      console.log("Maaf, browser Anda tidak mendukung local storage.");
-    }
-    navigate("/list-product");
+    dataProduct.splice(index, 1, editData);
+    localStorage.setItem("NEWPRODUCT", JSON.stringify(dataProduct));
+    setEditData(dataProduct);
+    console.log(dataProduct);
+    navigate(`/list-product`);
   };
 
   return (
@@ -50,37 +36,46 @@ const AddProduct = () => {
       <Container className="px-5" style={{ paddingTop: "100px", height: "80vh", backgroundColor: "" }}>
         <Row height={"50%"} className="p-1 justify-content-center">
           <Col md={8} className="">
-            <Form onSubmit={handlerNewProduct}>
+            <Form onSubmit={handleSubmitEdit}>
               <h1 className="fs-3">Add Product</h1>
-              <Form.Group className="my-3">
+              <Form.Group className="my-3" controlId="nameProduct">
                 <Form.Control
                   type="text"
-                  id="nameProduct"
-                  placeholder="Name"
+                  onChange={handleRegisterChange}
+                  value={editData.nameProduct}
+                  placeholder="Name Product"
+                  name="nameProduct"
                   style={{ backgroundColor: "#613D2B40", border: "solid 2px #613D2B" }}
                 />
               </Form.Group>
 
-              <Form.Group className="my-3" controlId="formBasicFullName">
+              <Form.Group className="my-3" controlId="stock">
                 <Form.Control
                   type="text"
-                  id="stock"
+                  onChange={handleRegisterChange}
+                  value={editData.stock}
+                  name="stock"
                   placeholder="Stock"
                   style={{ backgroundColor: "#613D2B40", border: "solid 2px #613D2B" }}
                 />
               </Form.Group>
-              <Form.Group className="my-3" controlId="formBasicFullName">
+              <Form.Group className="my-3" controlId="priceProduct">
                 <Form.Control
                   type="text"
-                  id="priceProduct"
+                  onChange={handleRegisterChange}
+                  value={editData.priceProduct}
+                  name="priceProduct"
                   placeholder="Price"
                   style={{ backgroundColor: "#613D2B40", border: "solid 2px #613D2B" }}
                 />
               </Form.Group>
-              <Form.Group className="my-3" controlId="formBasicFullName">
+              <Form.Group className="my-3" controlId="descriptionProduct">
                 <Form.Control
                   type="text"
                   id="descriptionProduct"
+                  value={editData.descriptionProduct}
+                  onChange={handleRegisterChange}
+                  name="descriptionProduct"
                   placeholder="Description Product"
                   style={{ backgroundColor: "#613D2B40", border: "solid 2px #613D2B" }}
                 />
@@ -93,7 +88,7 @@ const AddProduct = () => {
                   className="d-flex justify-content-center align-items-center"
                   style={{ border: "none", width: "260px", height: "40px", backgroundColor: "#613D2B", color: "white" }}
                 >
-                  Add Product
+                  Edit Product
                 </button>
               </Container>
             </Form>
@@ -107,4 +102,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;

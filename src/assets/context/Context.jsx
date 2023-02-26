@@ -4,28 +4,30 @@ export const ContextGlobal = createContext();
 
 export const ContextProvider = (props) => {
   const [state, setState] = useState(1);
-  const [userState, setUserState] = useState({
-    email: "",
-    password: "",
-    fullname: "",
-  });
+  const [userState, setUserState] = useState([
+    {
+      email: "",
+      password: "",
+      fullname: "",
+    },
+  ]);
   const [userData, setUserData] = useState([
     {
-      id: 1,
+      id: 0,
       email: "tahubulat@gmail.com",
       role: "admin",
       password: "12",
     },
     {
-      id: 2,
+      id: 1,
       email: "tahukotak@gmail.com",
       password: "123",
     },
     {
-      id: 3,
-      email: "tahubsegitiga@gmail.com",
+      id: 2,
+      email: "admin@gmail.com",
       role: "admin",
-      password: "1",
+      password: "admin",
     },
     {
       id: 3,
@@ -33,8 +35,27 @@ export const ContextProvider = (props) => {
       password: "123",
     },
   ]);
+  let [chartData, setChartData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
-  let kumpulanState = { state, setState, userState, setUserState, userData, setUserData };
+  let [stateQuantity, setStateQuantity] = useState();
+
+  let kumpulanState = {
+    showModal,
+    setShowModal,
+    state,
+    setState,
+    userState,
+    setUserState,
+    userData,
+    setUserData,
+    userState,
+    setUserState,
+    chartData,
+    setChartData,
+    stateQuantity,
+    setStateQuantity,
+  };
 
   return <ContextGlobal.Provider value={{ kumpulanState }}>{props.children}</ContextGlobal.Provider>;
 };

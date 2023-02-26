@@ -1,7 +1,34 @@
 import { Container, Table, Button } from "react-bootstrap";
 import AdminNav from "../Components/AdminNav";
+import { useState, useEffect } from "react";
+import { json } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ListProduk() {
+  const [listProduct, setListProduct] = useState([]);
+  const navigate = useNavigate();
+
+  const handlerToEditProduct = (index) => {
+    const convert = JSON.stringify(listProduct[index]);
+    localStorage.setItem("EDITPRODUCT", convert);
+    navigate(`/edit-product/${index}`);
+  };
+
+  useEffect(() => {
+    fecthData();
+  }, []);
+
+  const fecthData = () => {
+    const dataProduct = JSON.parse(localStorage.getItem("NEWPRODUCT"));
+    setListProduct(dataProduct);
+  };
+  const deleteProduct = (index) => {
+    const dataProduct = JSON.parse(localStorage.getItem("NEWPRODUCT"));
+    dataProduct.splice(index, 1);
+    localStorage.setItem("NEWPRODUCT", JSON.stringify(dataProduct));
+    setListProduct(dataProduct);
+  };
+
   return (
     <Container style={{ marginTop: "200PX" }}>
       <Table className="mt-5">
@@ -17,54 +44,24 @@ function ListProduk() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td></td>
-            <td>Cileungsi</td>
-            <td>16</td>
-            <td>150000</td>
-            <td></td>
-            <td className="d-flex gap-1">
-              <Button className="btn-success">Delete</Button>
-              <Button className="btn-danger">Update</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td></td>
-            <td>Serang</td>
-            <td>42</td>
-            <td>143000</td>
-            <td></td>
-            <td className="d-flex gap-1">
-              <Button className="btn-success">Delete</Button>
-              <Button className="btn-danger">Update</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td></td>
-            <td>Bekasi</td>
-            <td>13</td>
-            <td>130000</td>
-            <td></td>
-            <td className="d-flex gap-1">
-              <Button className="btn-success">Delete</Button>
-              <Button className="btn-danger">Update</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td></td>
-            <td>Serang</td>
-            <td>21</td>
-            <td>120000</td>
-            <td></td>
-            <td className="d-flex gap-1">
-              <Button className="btn-success">Delete</Button>
-              <Button className="btn-danger">Update</Button>
-            </td>
-          </tr>
+          {listProduct.map((item, index) => (
+            <tr>
+              <td>{index + 1}</td>
+              <td></td>
+              <td>{item.nameProduct}</td>
+              <td>{item.stock}</td>
+              <td>{item.priceProduct}</td>
+              <td>{item.descriptionProduct}</td>
+              <td className="d-flex gap-1">
+                <Button className="btn-success" onClick={() => handlerToEditProduct(index)}>
+                  Update
+                </Button>
+                <Button className="btn-danger" onClick={() => deleteProduct(index)}>
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </Container>

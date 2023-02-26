@@ -3,7 +3,11 @@ import Icon from "../assets/icon-2.png";
 import IconTri from "../assets/icon-3.png";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
-import data from "../assets/data.json";
+import { useState, useEffect } from "react";
+import produk1 from "../assets/produk-3.png";
+import { ContextGlobal } from "../assets/context/Context";
+import { useContext } from "react";
+
 //
 import waves from "../assets/Waves.png";
 
@@ -45,6 +49,26 @@ const waveStyle = {
 };
 
 function Jumbotron() {
+  const { kumpulanState } = useContext(ContextGlobal);
+  const { state, setState, stateQuantity, setStateQuantity } = kumpulanState;
+  const setQuantity = () => {
+    const chartData = JSON.parse(localStorage.getItem("CHARTDATA"));
+    const quantity = chartData.map((item) => item.quantity);
+    let result = quantity.reduce((sum, quantity) => {
+      return sum + quantity;
+    });
+    setStateQuantity(result);
+  };
+
+  const [productData, setProductData] = useState([]);
+  useEffect(() => {
+    setQuantity();
+    fecthData();
+  }, []);
+  const fecthData = () => {
+    const data = JSON.parse(localStorage.getItem("NEWPRODUCT"));
+    setProductData(data);
+  };
   return (
     <Container style={jContainer}>
       <Row>
@@ -63,17 +87,17 @@ function Jumbotron() {
           </div>
         </Col>
       </Row>
-      <Row className="d-flex justify-content-between" style={produk}>
-        {data.map((item, index) => (
-          <Col md={2}>
-            <Link to={`/detail-product/${index}`} style={{ textDecoration: "none", color: "black" }}>
+      <Row className="d-flex justify-content-center gap-5 " style={produk}>
+        {productData.map((item, index) => (
+          <Col md={3}>
+            <Link to={`/detail-product/${item.id}`} style={{ textDecoration: "none", color: "black" }}>
               <Card style={{ width: "18rem" }}>
-                <Card.Img variant="top" src={`/img/${item.photo}`} />
+                <Card.Img variant="top" src={produk1} />
                 <Card.Body style={cardColor}>
-                  <Card.Title>{item.name}</Card.Title>
+                  <Card.Title>{item.nameProduct}</Card.Title>
                   <Card.Text>
-                    <p>{item.price}</p>
-                    <p>{item.stock}</p>
+                    <p>Rp.{item.priceProduct}</p>
+                    <p>Stock:{item.stock}</p>
                   </Card.Text>
                 </Card.Body>
               </Card>

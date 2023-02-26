@@ -14,9 +14,9 @@ import { Badge } from "react-bootstrap";
 import { ContextGlobal } from "../assets/context/Context";
 import { useContext } from "react";
 
-function IsLoginNav() {
+function IsLoginNav(props) {
   const { kumpulanState } = useContext(ContextGlobal);
-  const { state, setState } = kumpulanState;
+  const { state, setState, stateQuantity, setStateQuantity } = kumpulanState;
   return (
     <Navbar bg="light" expand="lg">
       <Container
@@ -43,7 +43,7 @@ function IsLoginNav() {
                 <h1 className="position-relative d-inline-flex align-items-center">
                   <img src={ChartBucket} alt="..." style={{ width: "50px", height: "auto" }} />
                   <Badge pill className="fs-6" bg="danger" style={{ position: "absolute", top: 0, right: 0 }}>
-                    {state}
+                    {stateQuantity}
                   </Badge>
                 </h1>
               </Link>
@@ -64,12 +64,18 @@ function IsLoginNav() {
                     </Link>
                   </Dropdown.Item>
                   <Dropdown.Item>
-                    <Link to={""} style={{ textDecoration: "none", color: "#000000" }}>
-                      <div className="d-flex gap-2">
-                        <img src={Logout} width={"30px"} />
-                        <p>Logout</p>
-                      </div>
-                    </Link>
+                    <button
+                      className=""
+                      onClick={props.login}
+                      style={{ textDecoration: "none", color: "#000000", border: "none", backgroundColor: "transparent" }}
+                    >
+                      <Link to={"/"} style={{ textDecoration: "none", color: "black" }}>
+                        <div className="d-flex gap-2">
+                          <img src={Logout} width={"30px"} />
+                          <p>Logout</p>
+                        </div>
+                      </Link>
+                    </button>
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

@@ -2,6 +2,7 @@ import { Container } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 
 function TableTransaction() {
+  const data = JSON.parse(localStorage.getItem("PAYMENT"));
   return (
     <Container style={{ marginTop: "100px" }}>
       <Table>
@@ -16,38 +17,23 @@ function TableTransaction() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Sugeng No Pants</td>
-            <td>Cileungsi</td>
-            <td>16820</td>
-            <td>RWANDA Beans</td>
-            <td>Waiting Approve</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Haris Gams</td>
-            <td>Serang</td>
-            <td>42111</td>
-            <td>ETHIOPIA Beans</td>
-            <td>Success</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Aziz Union</td>
-            <td>Bekasi</td>
-            <td>13450</td>
-            <td>GUETEMALA Beans</td>
-            <td>Cancel</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Haris Gams</td>
-            <td>Serang</td>
-            <td>21331</td>
-            <td>Tanjung Balai</td>
-            <td>On The Way</td>
-          </tr>
+          {data.map((item, index) => {
+            console.log(item.productOrder);
+            return (
+              <tr>
+                <td>{index}</td>
+                <td>{item.name}</td>
+                <td>{item.shippingAddress}</td>
+                <td>{item.shippingPostCode}</td>
+                <td>
+                  {item.productOrder.map((order, index) => {
+                    return order;
+                  })}
+                </td>
+                <td>Waiting Approve</td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </Container>

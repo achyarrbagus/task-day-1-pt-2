@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import React from "react";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { json, Link } from "react-router-dom";
 import "../styles.css";
 import IsLoginNav from "./IsLoginNav";
 import AdminNav from "./AdminNav";
@@ -43,51 +43,95 @@ const MyNavbar = () => {
   const [islogin, setLogin] = useState(false);
   const [adminlogin, setAdminLogin] = useState(false);
   const { kumpulanState } = useContext(ContextGlobal);
-  const { userState, setUserState, userData, setUserData } = kumpulanState;
+  const { userData, setUserData } = kumpulanState;
   const [inputLogin, setInputLogin] = useState([
     {
       email: "",
       password: "",
     },
   ]);
+  const userDataLocal = JSON.parse(localStorage.getItem("USERDATA"));
 
   const handleDiretToAdmin = () => {
     navigate("/admin");
   };
 
-  const handleInputChange = (event) => {
-    let name = event.target.name;
-    let value = event.target.value;
-    setUserState({ ...userState, [name]: value });
+  const handleRegisterChange = (e) => {
+    e.preventDefault();
+    let name = e.target.name;
+    let value = e.target.value;
+    setUserData({ ...userData, [name]: value });
+    console.log(value);
+  };
+  const date = new Date();
+  const userId = date.getTime();
+
+  const handleRegisterSubmit = (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const fullname = document.getElementById("fullname").value;
+    const newUser = {
+      email: email,
+      password: password,
+      fullname: fullname,
+      chart: [],
+      id: userId,
+    };
+
+    const datas = [newUser];
+
+    if (typeof Storage !== "undefined") {
+      console.log("web browser tersedia");
+      if (localStorage.getItem("USERDATA")) {
+        let items = JSON.parse(localStorage.getItem("USERDATA"));
+        items.push(newUser);
+        const convertUpdate = JSON.stringify(items);
+        localStorage.setItem("USERDATA", convertUpdate);
+      } else {
+        const convert = JSON.stringify(datas);
+        localStorage.setItem("USERDATA", convert);
+      }
+    } else {
+      // Local storage tidak tersedia
+      console.log("Maaf, browser Anda tidak mendukung local storage.");
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
   //
   const handleLoginChange = (event) => {
     let name = event.target.name;
     let value = event.target.value;
     setInputLogin({ ...inputLogin, [name]: value });
-    console.log(value);
   };
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    const found = userData.find((user) => user.email === inputLogin.email && user.password === inputLogin.password);
+    const found = userDataLocal.find((user) => user.email === inputLogin.email && user.password === inputLogin.password);
     const admin = userData.find(
       (user) => user.email === inputLogin.email && user.password === inputLogin.password && user.role === "admin"
     );
+
     if (admin) {
       setAdminLogin(true);
+      const islogin = admin;
+      localStorage.setItem("ISLOGIN", JSON.stringify(admin));
       handleDiretToAdmin();
     } else if (found) {
       setLogin(true);
+      const islogin = found;
+      localStorage.setItem("ISLOGIN", JSON.stringify(islogin));
     } else {
       console.log("password not macth");
     }
+
+    setInputLogin([
+      {
+        email: "",
+        password: "",
+      },
+    ]);
   };
-  console.log(adminlogin);
 
   //
 
@@ -110,13 +154,19 @@ const MyNavbar = () => {
   if (adminlogin === true) {
     return (
       <>
-        <AdminNav />;
+        <AdminNav
+          admin={() => {
+            setAdminLogin(false);
+            console.log(adminlogin);
+          }}
+        />
+        ;
       </>
     );
   } else if (islogin === true) {
     return (
       <>
-        <IsLoginNav />;
+        <IsLoginNav login={() => setLogin(false)} />;
       </>
     );
   } else {
@@ -148,34 +198,37 @@ const MyNavbar = () => {
               <Modal.Title className="fs-2 fw-bolder">Register</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Form onSubmit={handleSubmit}>
+              <Form onSubmit={handleRegisterSubmit}>
                 <div className="mb-3" controlId="formBasicEmail">
                   <Form.Control
                     type="email"
+                    id="email"
                     placeholder="Email"
                     name="email"
-                    value={userState.email}
-                    onChange={handleInputChange}
+                    value={userData.email}
+                    onChange={handleRegisterChange}
                     style={{ backgroundColor: "#613D2B40", border: "solid 2px #613D2B" }}
                   />
                 </div>
                 <div className="mb-3" controlId="formBasicPassword">
                   <Form.Control
                     type="password"
+                    id="password"
                     placeholder="Password"
                     name="password"
-                    value={userState.password}
-                    onChange={handleInputChange}
+                    value={userData.password}
+                    onChange={handleRegisterChange}
                     style={{ backgroundColor: "#613D2B40", border: "solid 2px #613D2B" }}
                   />
                 </div>
                 <div className="mb-3" controlId="formBasicFullName">
                   <Form.Control
                     type="text"
+                    id="fullname"
                     name="fullname"
-                    value={userState.fullname}
+                    value={userData.fullname}
                     placeholder="Full Name"
-                    onChange={handleInputChange}
+                    onChange={handleRegisterChange}
                     style={{ backgroundColor: "#613D2B40", border: "solid 2px #613D2B" }}
                   />
                 </div>
