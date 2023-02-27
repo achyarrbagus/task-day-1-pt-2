@@ -37,10 +37,17 @@ export const ContextProvider = (props) => {
   ]);
   let [chartData, setChartData] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [islogin, setLogin] = useState(false);
+
+  const [adminlogin, setAdminLogin] = useState(false);
 
   let [stateQuantity, setStateQuantity] = useState();
 
   let kumpulanState = {
+    adminlogin,
+    setAdminLogin,
+    islogin,
+    setLogin,
     showModal,
     setShowModal,
     state,

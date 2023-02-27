@@ -40,10 +40,9 @@ const MyNavbar = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [showL, setShowL] = useState(false);
-  const [islogin, setLogin] = useState(false);
-  const [adminlogin, setAdminLogin] = useState(false);
+
   const { kumpulanState } = useContext(ContextGlobal);
-  const { userData, setUserData, stateQuantity, setStateQuantity } = kumpulanState;
+  const { userData, setUserData, islogin, setLogin, adminlogin, setAdminLogin } = kumpulanState;
   const [inputLogin, setInputLogin] = useState([
     {
       email: "",
@@ -135,7 +134,7 @@ const MyNavbar = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("ISLOGIN"));
     if (user) {
-      setLogin(true);
+      setLogin(false);
     }
 
     checkQty();
