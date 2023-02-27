@@ -14,7 +14,7 @@ import AdminNav from "./AdminNav";
 import { useNavigate } from "react-router-dom";
 //
 import { ContextGlobal } from "../assets/context/Context";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 const containerNav = {
   backgroundColor: "#F5F5F5",
@@ -43,7 +43,7 @@ const MyNavbar = () => {
   const [islogin, setLogin] = useState(false);
   const [adminlogin, setAdminLogin] = useState(false);
   const { kumpulanState } = useContext(ContextGlobal);
-  const { userData, setUserData } = kumpulanState;
+  const { userData, setUserData, stateQuantity, setStateQuantity } = kumpulanState;
   const [inputLogin, setInputLogin] = useState([
     {
       email: "",
@@ -61,7 +61,6 @@ const MyNavbar = () => {
     let name = e.target.name;
     let value = e.target.value;
     setUserData({ ...userData, [name]: value });
-    console.log(value);
   };
   const date = new Date();
   const userId = date.getTime();
@@ -132,6 +131,31 @@ const MyNavbar = () => {
       },
     ]);
   };
+  //
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("ISLOGIN"));
+    if (user) {
+      setLogin(true);
+    }
+
+    checkQty();
+    const handleStorageChange = (event) => {
+      checkQty();
+    };
+
+    window.addEventListener("storage", checkQty);
+  }, []);
+
+  //
+  const [qty, setqty] = useState(0);
+  const checkQty = () => {
+    const chartData = JSON.parse(localStorage.getItem("CHARTDATA")) || [];
+    let tmp = 0;
+    chartData.map((item, index) => {
+      tmp += item.quantity;
+    });
+    setqty(tmp);
+  };
 
   //
 
@@ -157,7 +181,6 @@ const MyNavbar = () => {
         <AdminNav
           admin={() => {
             setAdminLogin(false);
-            console.log(adminlogin);
           }}
         />
         ;
@@ -166,7 +189,7 @@ const MyNavbar = () => {
   } else if (islogin === true) {
     return (
       <>
-        <IsLoginNav login={() => setLogin(false)} />;
+        <IsLoginNav login={() => setLogin(false)} qty={qty} />;
       </>
     );
   } else {

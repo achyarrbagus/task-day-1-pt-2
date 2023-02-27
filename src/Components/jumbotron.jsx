@@ -51,18 +51,9 @@ const waveStyle = {
 function Jumbotron() {
   const { kumpulanState } = useContext(ContextGlobal);
   const { state, setState, stateQuantity, setStateQuantity } = kumpulanState;
-  const setQuantity = () => {
-    const chartData = JSON.parse(localStorage.getItem("CHARTDATA"));
-    const quantity = chartData.map((item) => item.quantity);
-    let result = quantity.reduce((sum, quantity) => {
-      return sum + quantity;
-    });
-    setStateQuantity(result);
-  };
 
   const [productData, setProductData] = useState([]);
   useEffect(() => {
-    setQuantity();
     fecthData();
   }, []);
   const fecthData = () => {

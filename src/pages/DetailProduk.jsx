@@ -20,18 +20,22 @@ const DetailProduk = () => {
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("NEWPRODUCT"));
     const foundId = data.find((item) => item.id === id);
-    // setQuantity();
+    setQuantity();
     setProduct(foundId);
   }, []);
   //
 
   const setQuantity = () => {
     const chartData = JSON.parse(localStorage.getItem("CHARTDATA"));
-    const quantity = chartData.map((item) => item.quantity);
-    let result = quantity.reduce((sum, quantity) => {
-      return sum + quantity;
-    });
-    setStateQuantity(result);
+    if (chartData.length != 0) {
+      const quantity = chartData.map((item) => item.quantity);
+      let result = quantity.reduce((sum, quantity) => {
+        return sum + quantity;
+      });
+      console.log(result);
+
+      setStateQuantity(result);
+    }
   };
 
   //
@@ -43,8 +47,8 @@ const DetailProduk = () => {
       descriptionProduct: product.descriptionProduct,
       Image: "https://seeklogo.com/images/K/kapal-api-logo-BDA931D774-seeklogo.com.png",
     };
-    setQuantity();
-    navigate("/");
+    // setQuantity();
+    // navigate("/");
 
     if (chartData === null) {
       newChart.quantity = 1;
@@ -69,6 +73,7 @@ const DetailProduk = () => {
       const chartDataJson = JSON.stringify(chartData);
       localStorage.setItem("CHARTDATA", chartDataJson);
     }
+    window.dispatchEvent(new Event("storage"));
   };
 
   return (

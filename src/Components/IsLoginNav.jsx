@@ -12,11 +12,30 @@ import Profile1 from "../assets/user2.png";
 import Logout from "../assets/logout.png";
 import { Badge } from "react-bootstrap";
 import { ContextGlobal } from "../assets/context/Context";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 
 function IsLoginNav(props) {
   const { kumpulanState } = useContext(ContextGlobal);
   const { state, setState, stateQuantity, setStateQuantity } = kumpulanState;
+
+  // useEffect(() => {
+  //   checkQty();
+  //   const handleStorageChange = (event) => {
+  //     checkQty();
+  //   };
+
+  //   window.addEventListener("storage", handleStorageChange);
+  // }, []);
+
+  // const [qty, setqty] = useState(0);
+  // const checkQty = () => {
+  //   const chartData = JSON.parse(localStorage.getItem("CHARTDATA")) || [];
+  //   let tmp = 0;
+  //   chartData.map((item, index) => {
+  //     tmp += item.quantity;
+  //   });
+  //   setqty(tmp);
+  // };
   return (
     <Navbar bg="light" expand="lg">
       <Container
@@ -43,7 +62,7 @@ function IsLoginNav(props) {
                 <h1 className="position-relative d-inline-flex align-items-center">
                   <img src={ChartBucket} alt="..." style={{ width: "50px", height: "auto" }} />
                   <Badge pill className="fs-6" bg="danger" style={{ position: "absolute", top: 0, right: 0 }}>
-                    {stateQuantity}
+                    {props.qty}
                   </Badge>
                 </h1>
               </Link>

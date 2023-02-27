@@ -26,7 +26,7 @@ const ChartProduk = () => {
   useEffect(() => {
     const datalocal = JSON.parse(localStorage.getItem("CHARTDATA"));
     setData(datalocal);
-    setQuantity();
+    // setQuantity();
     console.log(stateQuantity);
   }, []);
 
@@ -45,9 +45,7 @@ const ChartProduk = () => {
   let result = [];
 
   let chartOrder = JSON.parse(localStorage.getItem("CHARTDATA"));
-  console.log(chartOrder);
   for (let x of chartOrder) {
-    console.log(x);
     result.push(x.namaProduct);
   }
 
@@ -67,6 +65,31 @@ const ChartProduk = () => {
     console.log(result);
     setShowModal(true);
   };
+  const incrment = (index) => {
+    const updateChart = [...data];
+    updateChart[index].quantity += 1;
+    setData(updateChart);
+    localStorage.setItem("CHARTDATA", JSON.stringify(updateChart));
+    window.dispatchEvent(new Event("storage"));
+  };
+  const dcrement = (item, index) => {
+    const updateChart = [...data];
+    updateChart[index].quantity = Math.max(1, item.quantity - 1);
+    setData(updateChart);
+    localStorage.setItem("CHARTDATA", JSON.stringify(updateChart));
+    window.dispatchEvent(new Event("storage"));
+  };
+
+  const deleteItem = (index) => {
+    const dataChart = JSON.parse(localStorage.getItem("CHARTDATA"));
+    const updatedChart = [...dataChart];
+    updatedChart.splice(index, 1);
+    localStorage.setItem("CHARTDATA", JSON.stringify(updatedChart));
+    setData(updatedChart);
+    setStateQuantity();
+    window.dispatchEvent(new Event("storage"));
+    navigate("/");
+  };
 
   return (
     <Container>
@@ -82,27 +105,6 @@ const ChartProduk = () => {
       </Row>
       <Row>
         {data.map((item, index) => {
-          const incrment = () => {
-            const updateChart = [...data];
-            updateChart[index].quantity += 1;
-            setData(updateChart);
-          };
-          const dcrement = () => {
-            const updateChart = [...data];
-            updateChart[index].quantity = Math.max(1, item.quantity - 1);
-            setData(updateChart);
-          };
-
-          const deleteItem = () => {
-            const dataChart = JSON.parse(localStorage.getItem("CHARTDATA"));
-            const updatedChart = [...dataChart];
-            updatedChart.splice(index, 1);
-            localStorage.setItem("CHARTDATA", JSON.stringify(updatedChart));
-            setData(updatedChart);
-            setStateQuantity();
-            navigate("/");
-          };
-
           return (
             <Col md={7} key={item.id}>
               <div style={{ height: "1px", width: "100%", backgroundColor: "#613D2B" }}></div>
@@ -115,13 +117,13 @@ const ChartProduk = () => {
                     <h1 className="fs-4">{item.namaProduct}</h1>
                   </div>
                   <div className="d-flex gap-2">
-                    <button className="fs-5" style={{ border: "none" }} onClick={() => incrment()}>
+                    <button className="fs-5" style={{ border: "none" }} onClick={() => incrment(index)}>
                       +
                     </button>
                     <h3 className="fs-5 p-1 " style={{ backgroundColor: "#F6E6DA" }}>
                       {item.quantity}
                     </h3>
-                    <button className="fs-5" style={{ border: "none" }} onClick={dcrement}>
+                    <button className="fs-5" style={{ border: "none" }} onClick={() => dcrement(item, index)}>
                       -
                     </button>
                   </div>
@@ -132,7 +134,7 @@ const ChartProduk = () => {
                   </div>
                   <div className="d-flex justify-content-end pt-3">
                     <button
-                      onClick={deleteItem}
+                      onClick={() => deleteItem(index)}
                       className=""
                       style={{ border: "none", backgroundColor: "rgba(255,255,255,0.5)" }}
                     >
