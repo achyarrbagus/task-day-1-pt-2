@@ -8,10 +8,13 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
 import { json, Link } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
 import "../styles.css";
 import IsLoginNav from "./IsLoginNav";
 import AdminNav from "./AdminNav";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
 //
 import { ContextGlobal } from "../assets/context/Context";
 import { useContext, useEffect } from "react";
@@ -80,15 +83,29 @@ const MyNavbar = () => {
     const datas = [newUser];
 
     if (typeof Storage !== "undefined") {
-      console.log("web browser tersedia");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Your Browserr Not Comppatible!",
+      });
       if (localStorage.getItem("USERDATA")) {
         let items = JSON.parse(localStorage.getItem("USERDATA"));
         items.push(newUser);
         const convertUpdate = JSON.stringify(items);
         localStorage.setItem("USERDATA", convertUpdate);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Created Account Success!",
+        });
       } else {
         const convert = JSON.stringify(datas);
         localStorage.setItem("USERDATA", convert);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Created Account Success!",
+        });
       }
     } else {
       // Local storage tidak tersedia
@@ -115,12 +132,26 @@ const MyNavbar = () => {
       const islogin = admin;
       localStorage.setItem("ISLOGIN", JSON.stringify(admin));
       handleDiretToAdmin();
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Loginn... Success!",
+      });
     } else if (found) {
       setLogin(true);
       const islogin = found;
       localStorage.setItem("ISLOGIN", JSON.stringify(islogin));
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Loginn... Success!",
+      });
     } else {
-      console.log("password not macth");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Account Not Found!",
+      });
     }
 
     setInputLogin([

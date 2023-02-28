@@ -1,6 +1,7 @@
 import { Form } from "react-bootstrap";
 import { Container, Row, Col } from "react-bootstrap";
 import { Navigate, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import produkFor from "../assets/produk-4.png";
 
 const AddProduct = () => {
@@ -29,14 +30,27 @@ const AddProduct = () => {
 
     if (typeof Storage !== "undefined") {
       console.log("web browser tersedia");
+
       if (localStorage.getItem("NEWPRODUCT")) {
         let items = JSON.parse(localStorage.getItem("NEWPRODUCT"));
         items.push(newProduct);
         const convertUpdate = JSON.stringify(items);
         localStorage.setItem("NEWPRODUCT", convertUpdate);
+        Swal.fire({
+          icon: "success",
+          title: "Add Product Success",
+          timer: 1500,
+        });
+        navigate("/list-product");
       } else {
         const convert = JSON.stringify(datas);
         localStorage.setItem("NEWPRODUCT", convert);
+        Swal.alert({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          timer: 1500,
+        });
       }
     } else {
       // Local storage tidak tersedia
@@ -63,7 +77,7 @@ const AddProduct = () => {
 
               <Form.Group className="my-3" controlId="formBasicFullName">
                 <Form.Control
-                  type="text"
+                  type="number"
                   id="stock"
                   placeholder="Stock"
                   style={{ backgroundColor: "#613D2B40", border: "solid 2px #613D2B" }}
@@ -71,7 +85,7 @@ const AddProduct = () => {
               </Form.Group>
               <Form.Group className="my-3" controlId="formBasicFullName">
                 <Form.Control
-                  type="text"
+                  type="number"
                   id="priceProduct"
                   placeholder="Price"
                   style={{ backgroundColor: "#613D2B40", border: "solid 2px #613D2B" }}
@@ -79,7 +93,9 @@ const AddProduct = () => {
               </Form.Group>
               <Form.Group className="my-3" controlId="formBasicFullName">
                 <Form.Control
-                  type="text"
+                  as="textarea"
+                  rows={5}
+                  style={{ resize: "none" }}
                   id="descriptionProduct"
                   placeholder="Description Product"
                   style={{ backgroundColor: "#613D2B40", border: "solid 2px #613D2B" }}

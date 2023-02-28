@@ -8,6 +8,7 @@ import { ContextGlobal } from "../assets/context/Context";
 import { useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import ShippingModal from "../Components/ShippingModal";
+import Swal from "sweetalert2";
 
 const ChartProduk = () => {
   const { kumpulanState } = useContext(ContextGlobal);
@@ -88,6 +89,11 @@ const ChartProduk = () => {
     setData(updatedChart);
     setStateQuantity();
     window.dispatchEvent(new Event("storage"));
+    Swal.alert({
+      icon: "success",
+      title: "Add Product Success",
+      timer: 1500,
+    });
     navigate("/");
   };
 

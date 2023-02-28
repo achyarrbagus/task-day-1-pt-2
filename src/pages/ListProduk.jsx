@@ -3,6 +3,7 @@ import AdminNav from "../Components/AdminNav";
 import { useState, useEffect } from "react";
 import { json } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Swal } from "sweetalert2";
 
 function ListProduk() {
   const [listProduct, setListProduct] = useState([]);
@@ -23,10 +24,16 @@ function ListProduk() {
     setListProduct(dataProduct);
   };
   const deleteProduct = (index) => {
-    const dataProduct = JSON.parse(localStorage.getItem("NEWPRODUCT"));
-    dataProduct.splice(index, 1);
-    localStorage.setItem("NEWPRODUCT", JSON.stringify(dataProduct));
-    setListProduct(dataProduct);
+    // const dataProduct = JSON.parse(localStorage.getItem("NEWPRODUCT"));
+    // dataProduct.splice(index, 1);
+    // localStorage.setItem("NEWPRODUCT", JSON.stringify(dataProduct));
+    // setListProduct(dataProduct);
+    Swal.fire({
+      icon: "success",
+      title: `Delete Product Success${index}`,
+      timer: 1500,
+    });
+    console.log("hello world");
   };
 
   return (
